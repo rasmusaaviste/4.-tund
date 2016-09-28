@@ -20,6 +20,10 @@
 	$signupEmailerror = "";
 	$signupEmail = "";
 	$error = "";
+	$loginEmail = "";
+	$loginPassword = "";
+	$loginEmailerror = "";
+	$loginPassworderror = "";
 
 	//kas e-post oli olemas
 	if (isset ($_POST["signupEmail"])) {
@@ -142,7 +146,29 @@
 		 //login sisse
 		$error = login($_POST["loginEmail"], $_POST["loginPassword"]);
 		  
-	  }
+		  
+		}
+
+
+	// kas sisselogimisel on email ja parool olemas
+	
+	if (isset ($_POST["loginEmail"])) {
+		
+		
+		if (empty ($_POST ["loginEmail"])) {
+			//oli e-post, kuid see oli tühi
+			$loginEmailerror = "See väli on kohustuslik!";
+		}
+	}	
+	
+	if (isset ($_POST["loginPassword"])) {
+		
+		if (empty ($_POST ["loginPassword"])) {
+			//oli parool, kuid see oli tühi
+			$loginPassworderror = "See väli on kohustuslik!";
+		
+		}
+	}	
 ?>
 
 
@@ -159,9 +185,9 @@
 		
 		<form method="POST">
 			<p style="color:red;"><?=$error;?></p>
-			<input name="loginEmail" type="email"  placeholder="E-post"> 
+			<input name="loginEmail" type="email"  placeholder="E-post" value="<?php echo $loginEmail; ?>"> <?php echo $loginEmailerror;  ?>
 			<br><br>
-			<input name="loginPassword" type="password" placeholder="Parool">
+			<input name="loginPassword" type="password" placeholder="Parool"> <?php echo $loginPassworderror; ?>
 			<br><br>
 			<input type="submit" value="Logi sisse">
 		
