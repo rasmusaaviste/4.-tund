@@ -1,5 +1,6 @@
 <?php
-
+	
+	require("../../config.php");
 
 	//alustan sessiooni, et saaks kasutada $_SESSION muutujaid
 	
@@ -12,17 +13,17 @@
 	//****************
 	$database = "if16_Aavister";
 	
-	function signup ($email, $password) {
+	function signup ($email, $password, $age, $number) {
 		
 		
 		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
 		
 		
-		$stmt = $mysqli->prepare("INSERT INTO user_sample (email,password) VALUES (?, ?)");
+		$stmt = $mysqli->prepare("INSERT INTO user_sample (email,password,age,number) VALUES (?, ?, ?, ?)");
 		
 		echo $mysqli->error;
 		
-		$stmt->bind_param("ss", $email, $password);
+		$stmt->bind_param("ssii", $email, $password, $age, $number);
 		
 		if($stmt->execute()) {
 			
@@ -92,10 +93,72 @@
 		
 	}
 
+	function savePeople ($gender, $color) {
+		
+		
+		$error="";
+		
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		
+		
+		$stmt = $mysqli->prepare("INSERT INTO clothingOnTheCampus (gender,color) VALUES (?, ?)");
+		
+		echo $mysqli->error;
+		
+		$stmt->bind_param("ss", $gender, $color);
+		
+		if($stmt->execute()) {
+			
+			echo "salvestamine õnnestus"; 
+			
+		} else {
+			echo "ERROR ".$stmt->error;
+		
+		
+		
+		
+		
+		}
+	
+	}
 
 
 
-
+	function getAllPeople(){
+		
+		
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		
+		$stmt = $mysqli->prepare("SELECT id, gender, color, created FROM clothingOnTheCampus
+		");
+		
+		echo $mysqli->error;
+		
+		$stmt->bind_result($id, $gender, $color, $created);
+		$stmt->execute();
+		
+		$result= array();
+		//seni kuni on üks rida andmeid saada (10 rida = 10 korda)
+		while ($stmt->fetch()) {
+			
+			$person = new StdClass();
+			$person->id = $id;
+			$person->gender = $gender;
+			$person->clothingColor = $color;
+			$person->created = $created;
+			
+			//echo $color."<br>";
+			array_push($result, $person);
+			
+			
+		}
+		
+		$stmt->close();
+		$mysqli->close();
+		
+		return $result;
+		
+	}
 
 
 

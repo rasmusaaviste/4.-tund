@@ -1,7 +1,7 @@
 <?php
 	
 	// võtab ja kopeerib faili sisu
-	require("../../config.php");
+	
 	require("functions.php");
 	
 	if (isset ($_SESSION["userId"])) {
@@ -24,6 +24,8 @@
 	$loginPassword = "";
 	$loginEmailerror = "";
 	$loginPassworderror = "";
+	$age = "";
+	$number = "";
 
 	//kas e-post oli olemas
 	if (isset ($_POST["signupEmail"])) {
@@ -112,7 +114,6 @@
 	if ( 
 		 isset($_POST["signupPassword"]) &&
 		 isset($_POST["signupEmail"]) &&
-		
 		 empty($signupEmailerror) && 
 		 empty($signupPassworderror)    
 		
@@ -129,7 +130,10 @@
 		
 		//echo $serverUsername;
 		
-		signup($signupEmail, $password);
+		$signupAge = $_POST["signupAge"];
+		$signupNumber = $_POST["signupNumber"];
+		
+		signup($signupEmail, $password, $signupAge, $signupNumber);
 		
 		
 	}
